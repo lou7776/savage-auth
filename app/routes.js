@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb')
+
 module.exports = function(app, passport, db) {
 
 // normal routes ===============================================================
@@ -38,13 +40,10 @@ module.exports = function(app, passport, db) {
 
     app.put('/messages', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+      .findOneAndUpdate({_id: ObjectId(req.body.id)}, {
         $set: {
           thumbUp:req.body.thumbUp + 1
         }
-      }, {
-        sort: {_id: -1},
-        upsert: true
       }, (err, result) => {
         if (err) return res.send(err)
         res.send(result)
@@ -54,13 +53,10 @@ module.exports = function(app, passport, db) {
 
     app.put('/down', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+      .findOneAndUpdate({_id: ObjectId(req.body.id)}, {
         $set: {
           thumbUp:req.body.thumbUp - 1
         }
-      }, {
-        sort: {_id: -1},
-        upsert: true
       }, (err, result) => {
         if (err) return res.send(err)
         res.send(result)
@@ -68,7 +64,7 @@ module.exports = function(app, passport, db) {
     })
 
     app.delete('/messages', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+      db.collection('messages').findOneAndDelete({_id: ObjectId(req.body.id)}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })

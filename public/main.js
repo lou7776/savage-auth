@@ -4,15 +4,13 @@ const trash = document.getElementsByClassName("fa-trash-o");
 
 Array.from(thumbUp).forEach(function(element) {
       element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
+        const id = this.closest('li').dataset.id
         const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[5].innerText)
         fetch('messages', {
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            'name': name,
-            'msg': msg,
+            id: id,
             'thumbUp':thumbUp,
             'direction': 'up'
           })
@@ -30,18 +28,15 @@ Array.from(thumbUp).forEach(function(element) {
 
 Array.from(thumbDown).forEach(function(element) {
       element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
+        const id = this.closest('li').dataset.id
         const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[5].innerText)
-        const thumbDown = parseFloat(this.parentNode.parentNode.childNodes[7].innerText)
         fetch('down', {
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            'name': name,
-            'msg': msg,
-            'thumbUp':thumbUp,
-            'thumbDown':thumbDown,
+            id: id,
+            direction: 'down',
+            'thumbUp':thumbUp
           })
         })
         .then(response => {
@@ -59,16 +54,14 @@ Array.from(thumbDown).forEach(function(element) {
 
 Array.from(trash).forEach(function(element) {
       element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
+       const id = this.closest('li').dataset.id
         fetch('messages', {
           method: 'delete',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            'name': name,
-            'msg': msg
+            'id': id
           })
         }).then(function (response) {
           window.location.reload()
